@@ -617,7 +617,7 @@ footer .big span{color:var(--gold)}
   var gift=document.getElementById('gift'), btn=document.getElementById('openGift'), canvas=document.getElementById('confetti');
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var OPENED='asturias-regalo-abierto';
-  var opened=false; try{opened=localStorage.getItem(OPENED)==='1';}catch(e){}
+  var opened=false; try{localStorage.removeItem(OPENED);}catch(e){} /* siempre empieza con el regalo cerrado */
   var musicBtn=document.getElementById('music'), musicLabel=document.getElementById('musicLabel');
   if(opened){gift.classList.add('open');gift.hidden=true;musicBtn.hidden=false;} else {document.body.classList.add('locked');}
 
@@ -720,7 +720,7 @@ footer .big span{color:var(--gold)}
     gift.classList.add('open');
     startMusic();
     confetti();
-    try{localStorage.setItem(OPENED,'1');}catch(e){}
+    
     setTimeout(function(){gift.hidden=true;musicBtn.hidden=false;document.body.classList.remove('locked');window.scrollTo(0,0);}, reduce?50:1700);
   }
   btn.addEventListener('click',open);
