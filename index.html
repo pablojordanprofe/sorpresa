@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font-size:14px}img{max-width:100%}[hidden]{display:none!important}</style><title>Rumbo a Asturias</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a gift box opens onto one phone-width column; photo-led day cards, then field notes. Colours: Asturias flag blue + Cruz de la Victoria gold */
+:root{
+  --bg:#eef3f8;
+  --surface:#ffffff;
+  --fg:#0f1d2e;
+  --muted:#516276;
+  --line:#d4dde8;
+  --blue:#0b4f9c;        /* azul de la bandera */
+  --blue-deep:#06305e;
+  --gold:#d9a21b;        /* oro de la Cruz de la Victoria */
+  --gold-soft:#f7ebc9;
+  --green:#2e7a4f;       /* prado */
+  --chip:#e2eaf3;
+  --on-blue:#ffffff;
+  --display:"Big Shoulders Display","Arial Narrow",Impact,sans-serif;
+  --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#08121f;--surface:#0f1d30;--fg:#e7eef7;--muted:#9fb1c6;--line:#22344b;
+  --blue:#6aa8ec;--blue-deep:#0b2a4d;--gold:#f0bd45;--gold-soft:#33290f;--green:#72c597;--chip:#18283d;--on-blue:#08121f;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#08121f;--surface:#0f1d30;--fg:#e7eef7;--muted:#9fb1c6;--line:#22344b;
+  --blue:#6aa8ec;--blue-deep:#0b2a4d;--gold:#f0bd45;--gold-soft:#33290f;--green:#72c597;--chip:#18283d;--on-blue:#08121f;color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{overflow-x:hidden}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+body.locked{overflow:hidden}
+.wrap{max-width:640px;margin:0 auto}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;line-height:1;margin:0}
+h2{font-size:2.5rem;font-weight:900;text-transform:uppercase}
+h3{font-size:1.45rem;font-weight:800}
+p{margin:0}
+a{color:var(--blue);font-weight:600}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-offset:2px;border-radius:6px}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+img{display:block;max-width:100%}
+
+/* ===== Gift overlay (deliberately single-look: night blue) ===== */
+.gift{position:fixed;inset:0;z-index:50;background:radial-gradient(120% 80% at 50% 30%,#0e4c92 0%,#062a52 55%,#031a33 100%);
+  color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;text-align:center;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));
+  transition:opacity .7s ease .9s, visibility 0s linear 1.6s}
+.gift.open{opacity:0;visibility:hidden}
+.gift .stars{position:absolute;inset:0;pointer-events:none;background-image:
+  radial-gradient(1.5px 1.5px at 12% 18%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 78% 12%,#fff9 50%,transparent 51%),
+  radial-gradient(1.5px 1.5px at 64% 30%,#fff6 50%,transparent 51%),radial-gradient(1px 1px at 30% 70%,#fff7 50%,transparent 51%),
+  radial-gradient(1.5px 1.5px at 88% 64%,#fff6 50%,transparent 51%),radial-gradient(1px 1px at 20% 42%,#fff5 50%,transparent 51%),
+  radial-gradient(1px 1px at 50% 86%,#fff6 50%,transparent 51%)}
+.gift-kicker{font-family:var(--mono);font-size:.78rem;line-height:1.7;letter-spacing:.18em;text-transform:uppercase;color:#f0bd45}
+.tag-card{font-weight:600;font-size:.85rem!important}
+
+/* Music toggle */
+.music{position:fixed;z-index:40;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));
+  display:flex;align-items:center;gap:10px;background:var(--blue);color:var(--on-blue);border:0;border-radius:999px;padding:8px 16px 8px 8px;
+  font:600 .85rem var(--body);cursor:pointer;box-shadow:0 8px 24px #0005}
+.music .disc{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle,var(--gold) 0 5px,#111 6px 9px,#2a2a2a 10px 100%)}
+.music.playing .disc{animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.music.playing .disc{animation:none}}
+
+/* Hotel */
+.hotel{margin-top:14px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px;display:grid;gap:6px}
+.hotel h3{font-size:1.6rem}
+.hotel .stats{margin-top:4px}
+.gift-title{font-family:var(--display);font-weight:900;font-size:clamp(2.6rem,12vw,4rem);line-height:.95;text-transform:uppercase}
+.box-btn{background:none;border:0;padding:0;cursor:pointer;position:relative;width:200px;height:210px;-webkit-tap-highlight-color:transparent}
+.box{position:absolute;left:10px;right:10px;bottom:0;height:140px;border-radius:6px;
+  background:#0b4f9c;background-image:radial-gradient(#ffffff22 2px,transparent 2.5px);background-size:18px 18px;
+  box-shadow:0 18px 40px #0008, inset 0 -10px 0 #0003}
+.lid{position:absolute;left:0;right:0;top:52px;height:42px;border-radius:6px;background:#0d5cb4;
+  background-image:radial-gradient(#ffffff22 2px,transparent 2.5px);background-size:18px 18px;box-shadow:0 6px 0 #0003;
+  transition:transform .9s cubic-bezier(.3,1.4,.5,1)}
+.ribbon-v{position:absolute;left:50%;width:26px;margin-left:-13px;background:#f0bd45;top:0;bottom:0}
+.bow{position:absolute;left:50%;top:-30px;width:0;height:0}
+.bow::before,.bow::after{content:"";position:absolute;width:46px;height:30px;border:9px solid #f0bd45;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;top:0}
+.bow::before{right:2px;transform:rotate(-18deg)}
+.bow::after{left:2px;transform:rotate(18deg)}
+.knot{position:absolute;left:50%;top:-12px;width:22px;height:20px;margin-left:-11px;background:#d9a21b;border-radius:6px}
+.tag-card{position:absolute;right:-6px;bottom:24px;background:#fff;color:#062a52;font-family:var(--mono);font-size:.68rem;padding:4px 8px;border-radius:4px;transform:rotate(8deg);box-shadow:0 4px 10px #0005}
+.box-btn:hover .lid{transform:translateY(-6px) rotate(-3deg)}
+.gift.open .lid{transform:translateY(-220px) rotate(-40deg)}
+.gift.open .box{animation:pop .5s ease}
+@keyframes pop{50%{transform:scale(1.08)}}
+.hint{font-size:1rem;color:#c9dbf2;display:flex;align-items:center;gap:8px}
+.hint b{color:#fff}
+@media (prefers-reduced-motion:no-preference){
+  .box-btn{animation:wiggle 2.6s ease-in-out infinite}
+  @keyframes wiggle{0%,80%,100%{transform:rotate(0)}84%{transform:rotate(-4deg)}88%{transform:rotate(4deg)}92%{transform:rotate(-3deg)}96%{transform:rotate(2deg)}}
+  .gift.open .box-btn{animation:none}
+}
+#confetti{position:fixed;inset:0;z-index:60;pointer-events:none;width:100%;height:100%}
+
+/* ===== Hero ===== */
+.hero{margin-top:16px;position:relative;border-radius:22px;overflow:hidden;background:var(--blue-deep);aspect-ratio:4/5;max-height:640px;width:100%}
+.hero img{width:100%;height:100%;object-fit:cover;object-position:center 70%}
+.hero-text{position:absolute;inset:auto 0 0 0;padding:120px 20px 22px;background:linear-gradient(transparent,#031a33ee 60%);color:#fff;display:grid;gap:10px}
+.hero-text .eyebrow{color:#f0bd45}
+.hero h1{font-size:clamp(3.2rem,15vw,5.4rem);font-weight:900;text-transform:uppercase;line-height:.9}
+.hero h1 span{color:#f0bd45;display:block}
+.hero-text p{font-size:1.05rem;max-width:32ch;color:#e3ecf7}
+
+.letter{margin-top:22px;font-size:1.1rem;display:grid;gap:10px}
+.letter p:first-child{font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--blue)}
+
+/* Boarding pass */
+.pass{margin-top:22px;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.pass-top{background:var(--blue);color:var(--on-blue);padding:12px 18px;display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase}
+.leg{padding:16px 18px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:8px}
+.leg + .pass-foot + .leg{border-top:2px dashed var(--line)}
+.code{font-family:var(--display);font-weight:900;font-size:2.6rem;line-height:1}
+.leg .r{text-align:right}
+.leg small{display:block;font-family:var(--mono);font-size:.72rem;color:var(--muted)}
+.plane{font-family:var(--mono);font-size:.72rem;color:var(--muted);text-align:center}
+.plane b{display:block;font-size:1.2rem;color:var(--gold)}
+.pass-foot{display:flex;flex-wrap:wrap;gap:6px 18px;padding:10px 18px;background:var(--gold-soft);font-family:var(--mono);font-size:.75rem}
+
+/* Nav */
+nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-top:26px;padding-block:10px;
+  display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--line)}
+nav::-webkit-scrollbar{display:none}
+nav a{flex:none;text-decoration:none;color:var(--fg);background:var(--chip);padding:7px 14px;border-radius:999px;font-size:.9rem}
+nav a:hover{background:var(--gold-soft)}
+
+section{padding-top:42px;display:grid;gap:16px;scroll-margin-top:64px}
+.intro{color:var(--muted)}
+
+/* Days */
+.day{background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.day-photo{position:relative;aspect-ratio:16/9;background:var(--blue-deep)}
+.day-photo img{width:100%;height:100%;object-fit:cover}
+.day-photo .stamp{position:absolute;left:14px;top:14px;background:var(--gold);color:#1a1300;font-family:var(--display);font-weight:900;
+  line-height:.85;padding:8px 10px 6px;border-radius:10px;text-align:center}
+.stamp b{display:block;font-size:2.2rem}
+.stamp span{font-family:var(--mono);font-size:.62rem;text-transform:uppercase;letter-spacing:.1em}
+.day-body{padding:16px 18px 18px;display:grid;gap:10px;min-width:0}
+.tag{justify-self:start;font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:6px;background:var(--chip);color:var(--blue)}
+.ideas{margin:0;padding-left:18px;display:grid;gap:6px}.ideas li::marker{color:var(--gold)}.steps{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.steps li{display:grid;grid-template-columns:52px 1fr;gap:8px}
+.steps time{font-family:var(--mono);font-size:.8rem;color:var(--blue);padding-top:2px;font-variant-numeric:tabular-nums}
+.day.small .day-body{padding-top:18px}
+.day.small h3{display:flex;align-items:baseline;gap:10px}
+
+/* Cards */
+.cards{display:grid;gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:grid;min-width:0}
+.card > img{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--blue-deep)}
+.card-in{padding:16px;display:grid;gap:8px;min-width:0}
+.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card-head h3{font-size:1.35rem}
+.where{font-size:.85rem;color:var(--muted)}
+.stats{display:flex;flex-wrap:wrap;gap:6px}
+.stats span{font-family:var(--mono);font-size:.74rem;background:var(--chip);padding:3px 8px;border-radius:6px;font-variant-numeric:tabular-nums}
+.stats .lvl{background:var(--blue);color:var(--on-blue)}
+.note{font-size:.88rem;border-left:3px solid var(--gold);padding-left:10px;color:var(--muted)}
+.links{display:flex;gap:14px;flex-wrap:wrap;font-size:.9rem}
+
+.done{flex:none;display:flex;align-items:center;gap:6px;font-family:var(--mono);font-size:.7rem;color:var(--muted);cursor:pointer;user-select:none}
+.done input{width:22px;height:22px;accent-color:var(--green);margin:0}
+.card.is-done{opacity:.62}
+.card.is-done h3{text-decoration:line-through;text-decoration-color:var(--gold)}
+
+.group-title{font-family:var(--mono);font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);padding-top:6px}
+.order{background:var(--gold-soft);border-radius:16px;padding:16px;display:grid;gap:8px}
+.order ul{margin:0;padding-left:18px;display:grid;gap:4px}
+.cider-photo{border-radius:16px;overflow:hidden;display:grid;grid-template-columns:1fr 1.3fr;background:var(--surface);border:1px solid var(--line)}
+.cider-photo img{width:100%;height:100%;object-fit:cover;min-height:220px}
+.cider-photo div{padding:16px;display:grid;gap:8px;align-content:center;min-width:0}
+@media (max-width:420px){.cider-photo{grid-template-columns:1fr}.cider-photo img{aspect-ratio:4/3;min-height:0}}
+
+.gloss{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.gloss div{border-top:3px solid var(--gold);padding-top:8px}
+.gloss b{font-family:var(--display);font-size:1.4rem;display:block}
+.gloss span{font-size:.9rem;color:var(--muted)}
+.tips{display:grid;gap:10px;margin:0;padding-left:18px}
+
+footer{padding-top:56px;text-align:center;display:grid;gap:10px;justify-items:center}
+footer .big{font-family:var(--display);font-weight:900;font-size:clamp(2.6rem,13vw,4rem);color:var(--blue);text-transform:uppercase;line-height:.95}
+footer .big span{color:var(--gold)}
+.again{background:none;border:1px solid var(--line);color:var(--fg);font:inherit;font-size:.85rem;padding:8px 14px;border-radius:999px;cursor:pointer}
+.credits{margin-top:18px;font-size:.7rem;color:var(--muted);max-width:52ch}
+.credits a{font-weight:500;color:inherit}
+
+/* Cruz de la Victoria ornament */
+.cross{width:34px;height:34px;color:var(--gold)}
+</style>
+</head>
+<body>
+
+
+<!-- Gift intro -->
+<div class="gift" id="gift" role="dialog" aria-label="Sorpresa">
+  <div class="stars"></div>
+  <p class="gift-kicker">Para la señorita López,<br>con mucho cariño</p>
+  <p class="gift-title">Es momento<br>de celebrar</p>
+  <button class="box-btn" id="openGift" aria-label="Abrir el regalo">
+    <span class="box"><span class="ribbon-v"></span></span>
+    <span class="lid"><span class="ribbon-v"></span><span class="bow"></span><span class="knot"></span></span>
+    <span class="tag-card">40</span>
+  </button>
+  <p class="hint">Abre el regalo de <b>tus 40</b></p>
+</div>
+<canvas id="confetti" hidden></canvas>
+<audio id="unlock" src="silencio.wav" loop playsinline preload="auto"></audio>
+<button class="music" id="music" hidden aria-pressed="false"><span class="disc" aria-hidden="true"></span><span id="musicLabel">Poner música</span></button>
+
+<div class="wrap">
+
+<header>
+  <div class="hero">
+    <img src="fotos/portada.jpg" alt="Basílica de Covadonga" title="Foto: Giorgio Galeotti, CC BY-SA 4.0">
+    <div class="hero-text">
+      <p class="eyebrow">6 – 9 de diciembre de 2026</p>
+      <h1>Nos vamos <span>a Asturias</span></h1>
+      <p>Tú y yo, tres días de acantilados, montaña, sidra, fabada, cachopos y algún que otro capricho.</p>
+    </div>
+  </div>
+
+  <div class="letter">
+    <p>Prepara las botas.</p>
+    <p>Te he preparado este viaje para nosotros: rutas por acantilados donde el mar ruge, lagos entre montañas, castillos de los reyes de Asturias y las mejores sidrerías del norte. Aquí tienes todo el plan, para que lo vayas soñando desde ya.</p>
+  </div>
+
+  <div class="pass" aria-label="Nuestros vuelos">
+    <div class="pass-top"><span>Volotea · 2 viajeros</span><span>✓ Confirmado</span></div>
+    <div class="leg">
+      <div><span class="code">ALC</span><small>Alicante</small></div>
+      <div class="plane"><b>✈</b>dom 6 dic<br>1 h 40 min</div>
+      <div class="r"><span class="code">OVD</span><small>Asturias</small></div>
+    </div>
+    <div class="pass-foot"><span>Vuelo V7 3585</span><span>Salida 13:10</span><span>Llegada 14:50</span></div>
+    <div class="leg">
+      <div><span class="code">OVD</span><small>Asturias</small></div>
+      <div class="plane"><b>✈</b>mié 9 dic<br>1 h 30 min</div>
+      <div class="r"><span class="code">ALC</span><small>Alicante</small></div>
+    </div>
+    <div class="pass-foot"><span>Vuelo V7 3584</span><span>Salida 9:15</span><span>Llegada 10:45</span></div>
+  </div>
+
+  <div class="hotel">
+    <p class="eyebrow">Nuestro campamento base</p>
+    <h3>Exe Oviedo Centro</h3>
+    <p>Un cuatro estrellas en Oviedo, a un paseo de la calle Gascona y la Catedral. Ya está reservado.</p>
+    <div class="stats"><span class="lvl">3 noches</span><span>6 → 9 dic</span><span>Oviedo</span></div>
+    <div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Exe+Oviedo+Centro" target="_blank" rel="noopener">Ver en mapa</a></div>
+  </div>
+</header>
+
+<nav aria-label="Secciones">
+  <a href="#plan">El plan</a>
+  <a href="#rutas">Rutas</a>
+  <a href="#ver">Castillos y acantilados</a>
+  <a href="#comer">Comer</a>
+  <a href="#beber">Beber</a>
+  <a href="#saber">Asturianadas</a>
+</nav>
+
+<!-- PLAN -->
+<section id="plan">
+  <h2>Nuestros días</h2>
+  <p class="intro">Sin horarios ni prisas. Para cada día te dejo una zona y un montón de ideas, y vamos eligiendo sobre la marcha según el tiempo y lo que nos pida el cuerpo.</p>
+
+  <article class="day">
+    <div class="day-photo"><img src="fotos/elogio.jpg" alt="Elogio del Horizonte en Gijón" title="Foto: Fernando, CC BY-SA 4.0" loading="lazy"><div class="stamp"><b>6</b><span>dom</span></div></div>
+    <div class="day-body">
+      <span class="tag">Gijón · mar y sidra</span>
+      <h3>Aterrizar y oler a salitre</h3>
+      <p>Llegamos a media tarde, así que este día es de pasear sin mirar el reloj y empezar con la sidra.</p>
+      <ul class="ideas">
+        <li>Callejear por <b>Cimadevilla</b>, el barrio de pescadores.</li>
+        <li>Ver atardecer en el <b>Elogio del Horizonte</b> de Chillida, que suena cuando sopla el viento.</li>
+        <li>Paseo por la playa de <b>San Lorenzo</b> hasta la iglesia de San Pedro.</li>
+        <li>Curiosear el mercadillo navideño de la Plaza Mayor.</li>
+        <li>Fabada o cachopo en <b>Río Astur</b> y una copa en <b>Varsovia</b>.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="day">
+    <div class="day-photo"><img src="fotos/penas.jpg" alt="Cabo Peñas y su faro" title="Foto: Malopez 21, CC BY-SA 4.0" loading="lazy"><div class="stamp"><b>7</b><span>lun</span></div></div>
+    <div class="day-body">
+      <span class="tag">Costa occidental</span>
+      <h3>Cabo Peñas, un castillo y Cudillero</h3>
+      <p>El día de los acantilados. Mejor empezar con la ruta por la mañana y dejar la tarde para los pueblos.</p>
+      <ul class="ideas">
+        <li>La senda por los acantilados de <b>Cabo Peñas</b> hasta el faro, el punto más al norte de Asturias.</li>
+        <li>El <b>Castillo de San Martín</b>, una torre del siglo IX que vigilaba la ría del Nalón de los vikingos.</li>
+        <li>Comer pescado en <b>Cudillero</b>, entre casas de colores colgadas sobre el puerto.</li>
+        <li>Asomarnos a los acantilados de <b>Cabo Vidío</b> o bajar a la Playa del Silencio.</li>
+        <li>Por la noche, sidra y raciones por la <b>calle Gascona</b> de Oviedo.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="day">
+    <div class="day-photo"><img src="fotos/ercina.jpg" alt="Lago Ercina en los Picos de Europa" title="Foto: Himarerme, CC BY-SA 4.0" loading="lazy"><div class="stamp"><b>8</b><span>mar</span></div></div>
+    <div class="day-body">
+      <span class="tag">Oriente y Picos de Europa</span>
+      <h3>Bufones, el Infierno y los Lagos</h3>
+      <p>Mar bravo por la mañana y montaña por la tarde. Si el día sale bueno, es el más espectacular del viaje.</p>
+      <ul class="ideas">
+        <li>Los <b>Bufones de Pría y los Acantilados del Infierno</b>, donde el mar sale disparado por las grietas del suelo.</li>
+        <li><b>Covadonga</b>: la Santa Cueva sobre la cascada y la basílica rosa.</li>
+        <li>La ruta por los <b>Lagos Enol y Ercina</b>, con los Picos nevados de fondo.</li>
+        <li>Foto en el Puente Romano de <b>Cangas de Onís</b>.</li>
+        <li>Cena de despedida en <b>Casa Fermín</b> o <b>El Rincón de Adi</b>, y moscovitas para llevarnos a casa.</li>
+      </ul>
+    </div>
+  </article>
+
+  <article class="day small">
+    <div class="day-body">
+      <span class="tag">Miércoles 9 · vuelta</span>
+      <h3><svg class="cross" viewBox="0 0 40 40" aria-hidden="true"><path fill="currentColor" d="M17 2h6v13h13v6H23v17h-6V21H4v-6h13z"/><circle cx="20" cy="18" r="4" fill="currentColor"/></svg>Volvemos con la maleta llena</h3>
+      <p>Madrugón, café y de vuelta a casa con los dulces, la sidra y muchas ganas de volver.</p>
+    </div>
+  </article>
+</section>
+
+<!-- RUTAS -->
+<section id="rutas">
+  <h2>Nuestras rutas</h2>
+  <p class="intro">Para nosotros, que nos gusta patear. Ve marcando las que hacemos.</p>
+
+  <div class="cards">
+    <article class="card" data-id="r-penas">
+      <img src="fotos/penas.jpg" alt="Acantilados de Cabo Peñas" title="Foto: Malopez 21, CC BY-SA 4.0" loading="lazy">
+      <div class="card-in">
+        <div class="card-head"><h3>Senda costera de Cabo Peñas</h3><label class="done"><input type="checkbox" id="c-r-penas">¡Hecha!</label></div>
+        <p class="where">Gozón · día 7</p>
+        <div class="stats"><span class="lvl">Media</span><span>9–12 km</span><span>3–4 h</span><span>Costa</span></div>
+        <p>Acantilados de casi 100 metros, el faro más al norte de Asturias y un mar que no para quieto. La ruta estrella del viaje.</p>
+        <p class="note">Si sopla temporal, la hacemos corta, solo alrededor del faro.</p>
+        <div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Faro+de+Cabo+Pe%C3%B1as" target="_blank" rel="noopener">Ver en mapa</a></div>
+      </div>
+    </article>
+
+    <article class="card" data-id="r-bufones">
+      <img src="fotos/bufones.jpg" alt="Bufones de Pría echando agua al atardecer" title="Foto: Ivilarmi, CC BY-SA 3.0" loading="lazy">
+      <div class="card-in">
+        <div class="card-head"><h3>Bufones de Pría y Acantilados del Infierno</h3><label class="done"><input type="checkbox" id="c-r-bufones">¡Hecha!</label></div>
+        <p class="where">Llames de Pría y Guadamía, Llanes · día 8</p>
+        <div class="stats"><span class="lvl">Fácil-media</span><span>~7 km</span><span>2–3 h</span><span>Costa kárstica</span></div>
+        <p>Grietas en la roca por las que el mar sopla chorros de agua y espuma con un rugido que se oye de lejos. En invierno, con mar bravo, es un espectáculo.</p>
+        <p class="note">Mejor con marea alta y oleaje. Y nada de asomarnos a las grietas.</p>
+        <div class="links"><a href="https://www.turismoasturias.es/descubre/naturaleza/rutas/senderismo/acantilados-del-infierno" target="_blank" rel="noopener">La ruta</a><a href="https://www.google.com/maps/search/?api=1&query=Bufones+de+Pr%C3%ADa" target="_blank" rel="noopener">Ver en mapa</a></div>
+      </div>
+    </article>
+
+    <article class="card" data-id="r-lagos">
+      <img src="fotos/ercina.jpg" alt="Lago Ercina" title="Foto: Himarerme, CC BY-SA 4.0" loading="lazy">
+      <div class="card-in">
+        <div class="card-head"><h3>Lagos de Covadonga: Enol y Ercina</h3><label class="done"><input type="checkbox" id="c-r-lagos">¡Hecha!</label></div>
+        <p class="where">Picos de Europa · día 8</p>
+        <div class="stats"><span class="lvl">Media</span><span>~5,5 km</span><span>2 h</span><span>1.100 m de altitud</span></div>
+        <p>Circular entre los dos lagos por el Mirador de Entrelagos y las minas de Buferrera, con vacas, niebla y los Picos de fondo.</p>
+        <p class="note">Arriba hace frío de verdad: guantes y gorro.</p>
+        <div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Lago+Ercina" target="_blank" rel="noopener">Ver en mapa</a></div>
+      </div>
+    </article>
+
+    <article class="card" data-id="r-cervigon">
+      <div class="card-in">
+        <div class="card-head"><h3>Cimadevilla y la senda costera de Gijón</h3><label class="done"><input type="checkbox" id="c-r-cervigon">¡Hecha!</label></div>
+        <p class="where">Gijón · día 6</p>
+        <div class="stats"><span class="lvl">Fácil</span><span>~6 km</span><span>1 h 45</span><span>Ciudad y mar</span></div>
+        <p>Del puerto deportivo al Elogio del Horizonte y luego todo San Lorenzo. Perfecta para estirar las piernas después del avión.</p>
+      </div>
+    </article>
+
+    <p class="group-title">Si nos sobran piernas</p>
+
+    <article class="card" data-id="r-xanas">
+      <div class="card-in">
+        <div class="card-head"><h3>Ruta de las Xanas</h3><label class="done"><input type="checkbox" id="c-r-xanas">¡Hecha!</label></div>
+        <p class="where">Santo Adriano · a media hora de Oviedo</p>
+        <div class="stats"><span class="lvl">Media</span><span>~8 km ida y vuelta</span><span>2,5–3 h</span><span>Desfiladero</span></div>
+        <p>Un desfiladero estrecho con pasos tallados en la roca, túneles y cascadas. Según la leyenda, lo habitan las xanas, ninfas del agua. Nuestro plan B si llueve en la costa.</p>
+        <div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Ruta+de+las+Xanas" target="_blank" rel="noopener">Ver en mapa</a></div>
+      </div>
+    </article>
+
+    <article class="card" data-id="r-naranco">
+      <div class="card-in">
+        <div class="card-head"><h3>Monte Naranco</h3><label class="done"><input type="checkbox" id="c-r-naranco">¡Hecha!</label></div>
+        <p class="where">Oviedo</p>
+        <div class="stats"><span class="lvl">Fácil-media</span><span>~8 km</span><span>2,5 h</span><span>Patrimonio UNESCO</span></div>
+        <p>Subimos desde la ciudad hasta los palacios prerrománicos del siglo IX y luego al Cristo, con Oviedo a nuestros pies.</p>
+      </div>
+    </article>
+
+    <article class="card" data-id="r-cares">
+      <div class="card-in">
+        <div class="card-head"><h3>Ruta del Cares, para la próxima</h3><label class="done"><input type="checkbox" id="c-r-cares">¡Hecha!</label></div>
+        <p class="where">Poncebos a Caín, Picos de Europa</p>
+        <div class="stats"><span class="lvl">Larga</span><span>12 km solo ida</span><span>6–7 h ida y vuelta</span></div>
+        <p>La "garganta divina": una senda colgada sobre el río Cares. Pide un día largo de primavera, así que ya tenemos excusa para volver.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- VER -->
+<section id="ver">
+  <h2>Castillos y acantilados</h2>
+  <p class="intro">Aquí empezó el Reino de Asturias: torres medievales, palacios de hace mil años y una costa salvaje.</p>
+  <div class="cards">
+    <article class="card" data-id="v-naranco">
+      <img src="fotos/naranco.jpg" alt="Santa María del Naranco" title="Foto: Fernando, CC BY-SA 4.0" loading="lazy">
+      <div class="card-in">
+        <div class="card-head"><h3>Santa María del Naranco</h3><label class="done"><input type="checkbox" id="c-v-naranco">¡Visto!</label></div>
+        <p class="where">Oviedo · siglo IX</p>
+        <p>El palacio de recreo del rey Ramiro I, Patrimonio de la Humanidad, que parece un pequeño templo griego en mitad del monte. Al lado está San Miguel de Lillo.</p>
+      </div>
+    </article>
+    <article class="card" data-id="v-sanmartin">
+      <div class="card-in">
+        <div class="card-head"><h3>Castillo de San Martín</h3><label class="done"><input type="checkbox" id="c-v-sanmartin">¡Visto!</label></div>
+        <p class="where">Soto del Barco · ría del Nalón</p>
+        <p>Una fortaleza atribuida a Alfonso III, levantada sobre un castro para defender la ría de los normandos. Desde allí la desembocadura se ve espectacular.</p>
+        <div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Castillo+de+San+Mart%C3%ADn+Soto+del+Barco" target="_blank" rel="noopener">Ver en mapa</a></div>
+      </div>
+    </article>
+    <article class="card" data-id="v-gauzon">
+      <div class="card-in">
+        <div class="card-head"><h3>Castillo de Gauzón</h3><label class="done"><input type="checkbox" id="c-v-gauzon">¡Visto!</label></div>
+        <p class="where">Raíces, Castrillón · junto a Avilés</p>
+        <p>La fortaleza de los reyes de Asturias. Cuenta la tradición que allí se hizo la Cruz de la Victoria, la de la bandera. Hoy es un yacimiento que se está reconstruyendo, sobre un cerro con vistas a la ría.</p>
+      </div>
+    </article>
+    <article class="card" data-id="v-cudillero">
+      <img src="fotos/cudillero.jpg" alt="Cudillero desde lo alto" title="Foto: Axel Cotón Gutiérrez, CC BY-SA 4.0" loading="lazy">
+      <div class="card-in">
+        <div class="card-head"><h3>Cudillero y Cabo Vidío</h3><label class="done"><input type="checkbox" id="c-v-cudillero">¡Visto!</label></div>
+        <p class="where">Occidente</p>
+        <p>Un anfiteatro de casas de colores sobre el puerto y, a pocos minutos, el Cabo Vidío: acantilados verticales de 80 metros y un faro asomado al vacío. La Playa del Silencio queda cerca.</p>
+        <div class="links"><a href="https://www.google.com/maps/search/?api=1&query=Cabo+Vid%C3%ADo" target="_blank" rel="noopener">Ver en mapa</a></div>
+      </div>
+    </article>
+    <article class="card" data-id="v-covadonga">
+      <div class="card-in">
+        <div class="card-head"><h3>Covadonga</h3><label class="done"><input type="checkbox" id="c-v-covadonga">¡Visto!</label></div>
+        <p class="where">Cangas de Onís</p>
+        <p>La Santa Cueva, encajada en la roca sobre una cascada, y la basílica de piedra rosa. Aquí, cuenta la historia, empezó todo.</p>
+      </div>
+    </article>
+    <article class="card" data-id="v-oviedo">
+      <div class="card-in">
+        <div class="card-head"><h3>Oviedo antiguo</h3><label class="done"><input type="checkbox" id="c-v-oviedo">¡Visto!</label></div>
+        <p class="where">La Vetusta de La Regenta</p>
+        <p>La Catedral y su Cámara Santa, donde se guarda la Cruz de la Victoria, la plaza del Fontán, Trascorrales, la estatua de la Regenta y las esculturas por las calles. De noche, con las luces de Navidad, es otra ciudad.</p>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- COMER -->
+<section id="comer">
+  <h2>Comer bien</h2>
+  <div class="order">
+    <p class="eyebrow">Lo que vamos a pedir</p>
+    <ul>
+      <li><b>Fabada</b> con su compango: chorizo, morcilla y lacón.</li>
+      <li><b>Cachopo</b> para compartir, porque es enorme.</li>
+      <li><b>Cabrales</b>, chorizo a la sidra y <b>tortos</b> con picadillo.</li>
+      <li>Pixín (rape) y marisco en la costa.</li>
+      <li>De postre, <b>arroz con leche requemado</b> y frixuelos.</li>
+    </ul>
+  </div>
+
+  <p class="group-title">Gijón</p>
+  <div class="cards">
+    <article class="card" data-id="f-rioastur"><div class="card-in">
+      <div class="card-head"><h3>Sidrería Río Astur</h3><label class="done"><input type="checkbox" id="c-f-rioastur">¡Probado!</label></div>
+      <p>La Mejor Fabada del Mundo 2026 y premio nacional al mejor cachopo. Nuestra primera cena.</p>
+    </div></article>
+    <article class="card" data-id="f-roman"><div class="card-in">
+      <div class="card-head"><h3>Sidrería Román</h3><label class="done"><input type="checkbox" id="c-f-roman">¡Probado!</label></div>
+      <p>Premio al Pote Perfecto. Cocina asturiana de siempre y buena sidra.</p>
+    </div></article>
+    <article class="card" data-id="f-tonada"><div class="card-in">
+      <div class="card-head"><h3>La Tonada</h3><label class="done"><input type="checkbox" id="c-f-tonada">¡Probado!</label></div>
+      <p>En La Guía, junto al Parque de Isabel la Católica. De las fabadas más alabadas de Gijón.</p>
+    </div></article>
+  </div>
+
+  <p class="group-title">Oviedo</p>
+  <div class="cards">
+    <article class="card" data-id="f-fermin"><div class="card-in">
+      <div class="card-head"><h3>Casa Fermín</h3><label class="done"><input type="checkbox" id="c-f-fermin">¡Probado!</label></div>
+      <p>Un clásico elegante para la cena especial: cocina asturiana muy fina y una bodega enorme.</p>
+    </div></article>
+    <article class="card" data-id="f-adi"><div class="card-in">
+      <div class="card-head"><h3>El Rincón de Adi</h3><label class="done"><input type="checkbox" id="c-f-adi">¡Probado!</label></div>
+      <p>Subcampeón de la Mejor Fabada del Mundo 2026. Pequeño y casero.</p>
+    </div></article>
+    <article class="card" data-id="f-pichote"><div class="card-in">
+      <div class="card-head"><h3>Pichote La Sidrería</h3><label class="done"><input type="checkbox" id="c-f-pichote">¡Probado!</label></div>
+      <p>Cachopos premiados y raciones de las que no se acaban.</p>
+    </div></article>
+    <article class="card" data-id="f-gascona"><div class="card-in">
+      <div class="card-head"><h3>Calle Gascona: El Gato Negro, La Lola, Alterna</h3><label class="done"><input type="checkbox" id="c-f-gascona">¡Probado!</label></div>
+      <p>El "Bulevar de la Sidra": ir de una sidrería a otra pidiendo raciones al centro.</p>
+    </div></article>
+    <article class="card" data-id="f-floro"><div class="card-in">
+      <div class="card-head"><h3>La Cava de Floro</h3><label class="done"><input type="checkbox" id="c-f-floro">¡Probado!</label></div>
+      <p>De los sitios más queridos de la ciudad por la gente de aquí.</p>
+    </div></article>
+  </div>
+
+  <p class="group-title">Dulce</p>
+  <div class="cards">
+    <article class="card" data-id="f-dulces"><div class="card-in">
+      <div class="card-head"><h3>Moscovitas y carbayones</h3><label class="done"><input type="checkbox" id="c-f-dulces">¡Probado!</label></div>
+      <p>Las moscovitas de Confitería Rialto y los carbayones de Camilo de Blas, en Oviedo: para merendar y para traer a casa.</p>
+    </div></article>
+  </div>
+</section>
+
+<!-- BEBER -->
+<section id="beber">
+  <h2>Beber mejor</h2>
+  <div class="cider-photo">
+    <img src="fotos/sidra.jpg" alt="Un camarero escanciando sidra en Oviedo" title="Foto: Hispalois, CC BY-SA 4.0" loading="lazy">
+    <div>
+      <p class="eyebrow">El ritual de la sidra</p>
+      <p>El camarero la <b>escancia</b> desde lo alto para que rompa contra el vaso. Te sirve un <b>culín</b> y te lo bebes al momento, de un trago, mientras tiene espuma. El último poquito se tira, y el vaso pasa al siguiente.</p>
+      <p>Una botella da para unos seis culinos.</p>
+    </div>
+  </div>
+  <div class="cards">
+    <article class="card" data-id="b-gascona"><div class="card-in">
+      <div class="card-head"><h3>Sidra en Gascona</h3><label class="done"><input type="checkbox" id="c-b-gascona">¡Hecho!</label></div>
+      <p class="where">Oviedo</p>
+      <p>La calle de las sidrerías. Al menos una noche entera aquí.</p>
+    </div></article>
+    <article class="card" data-id="b-vermut"><div class="card-in">
+      <div class="card-head"><h3>Vermut en Ramón y Cajal</h3><label class="done"><input type="checkbox" id="c-b-vermut">¡Hecho!</label></div>
+      <p class="where">Oviedo</p>
+      <p>La zona de los vinos de mediodía. En Casa González Suárez, vermut con jamón del bueno.</p>
+    </div></article>
+    <article class="card" data-id="b-urban"><div class="card-in">
+      <div class="card-head"><h3>Urban Cocktail Club</h3><label class="done"><input type="checkbox" id="c-b-urban">¡Hecho!</label></div>
+      <p class="where">Oviedo · junto a la Catedral</p>
+      <p>Cócteles de autor para la última copa.</p>
+    </div></article>
+    <article class="card" data-id="b-varsovia"><div class="card-in">
+      <div class="card-head"><h3>Varsovia</h3><label class="done"><input type="checkbox" id="c-b-varsovia">¡Hecho!</label></div>
+      <p class="where">Gijón</p>
+      <p>Una de las coctelerías con más fama del norte, en un edificio modernista.</p>
+    </div></article>
+    <article class="card" data-id="b-balance"><div class="card-in">
+      <div class="card-head"><h3>The Balance y Cantora Copas</h3><label class="done"><input type="checkbox" id="c-b-balance">¡Hecho!</label></div>
+      <p class="where">Gijón</p>
+      <p>Cócteles originales con música indie, o copas con música en directo junto a la bahía.</p>
+    </div></article>
+  </div>
+</section>
+
+<!-- SABER -->
+<section id="saber">
+  <h2>Asturianadas</h2>
+  <div class="gloss">
+    <div><b>Chigre</b><span>Bar o sidrería de toda la vida.</span></div>
+    <div><b>Culín</b><span>El trago de sidra que te sirven. Se bebe de una vez.</span></div>
+    <div><b>Bufón</b><span>Grieta del acantilado por la que el mar sopla agua.</span></div>
+    <div><b>Orbayu</b><span>La lluvia fina asturiana, que no moja pero empapa.</span></div>
+    <div><b>Prestar</b><span>Gustar. "¿Préstate?" quiere decir "¿te gusta?".</span></div>
+    <div><b>¡Puxa Asturies!</b><span>Nuestro brindis oficial.</span></div>
+  </div>
+  <ul class="tips">
+    <li><b>En la maleta:</b> capas, chubasquero, gorro y botas impermeables con buena suela. Haremos entre 6 y 12 °C, y menos en los Lagos.</li>
+    <li><b>A la asturiana:</b> se come sobre las 14:30, se cena a partir de las 21:00 y las raciones son gigantes, así que pedimos de menos.</li>
+  </ul>
+</section>
+
+<footer>
+  <svg class="cross" viewBox="0 0 40 40" aria-hidden="true"><path fill="currentColor" d="M17 2h6v13h13v6H23v17h-6V21H4v-6h13z"/><circle cx="20" cy="18" r="4" fill="currentColor"/></svg>
+  <p class="big">¿Nos vamos?<br><span>¡Puxa Asturies!</span></p>
+  <button class="again" id="again">Abrir el regalo otra vez</button>
+  
+</footer>
+
+</div>
+
+<script>
+(function(){
+  /* Checks per place, kept on this phone */
+  var KEY='asturias-hecho', state={};
+  try{state=JSON.parse(localStorage.getItem(KEY)||'{}')||{};}catch(e){state={};}
+  document.querySelectorAll('.card[data-id]').forEach(function(card){
+    var id=card.getAttribute('data-id'), box=card.querySelector('input[type=checkbox]');
+    if(!box)return;
+    box.checked=!!state[id]; card.classList.toggle('is-done',box.checked);
+    box.addEventListener('change',function(){
+      state[id]=box.checked; card.classList.toggle('is-done',box.checked);
+      try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}
+    });
+  });
+
+  /* Gift */
+  var gift=document.getElementById('gift'), btn=document.getElementById('openGift'), canvas=document.getElementById('confetti');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var OPENED='asturias-regalo-abierto';
+  var opened=false; try{opened=localStorage.getItem(OPENED)==='1';}catch(e){}
+  var musicBtn=document.getElementById('music'), musicLabel=document.getElementById('musicLabel');
+  if(opened){gift.classList.add('open');gift.hidden=true;musicBtn.hidden=false;} else {document.body.classList.add('locked');}
+
+  /* ---- Asturias, patria querida: gaita, roncón y tambor (Web Audio) ---- */
+  var ctx=null, master=null, playing=false, nextStart=0, timer=null;
+  var F={'D4':293.66,'E4':329.63,'F#4':369.99,'G4':392,'A4':440,'B4':493.88,'C#5':554.37,'D5':587.33};
+  var A_BODY=[['F#4',1],['F#4',1],['G4',.5],['F#4',.25],['G4',.25],['A4',.5],['B4',.5],['A4',1],['A4',1],['B4',1],['G4',1],['B4',.5],['A4',.25],['B4',.25]];
+  var A_END1=[['A4',.5],['G4',.5],['F#4',1],['D4',1]];
+  var A_END2=[['A4',.5],['G4',.5],['F#4',1],['D4',.5],['E4',.5]];
+  var B_BODY=[['B4',.5],['B4',.5],['A4',1],['B4',.5],['B4',.5],['A4',.5],['C#5',.5],['B4',.5],['A4',.5],['A4',1],['A4',.5],['F#4',.5],['G4',1],['A4',.5],['B4',.5],['A4',1],['G4',.5],['E4',.5],['F#4',.5],['G4',.5]];
+  var B_END1=[['B4',.5],['A4',.5],['G4',1],['F#4',.5],['E4',.5]];
+  var B_END2=[['B4',.5],['A4',.5],['G4',1],['F#4',4],['R',3]];
+  var TUNE=[['D4',1]].concat(A_BODY,A_END1,A_BODY,A_END2,B_BODY,B_END1,B_BODY,B_END2);
+  var BEAT=60/80;
+
+  function chanter(f,t,d){
+    var o1=ctx.createOscillator(),o2=ctx.createOscillator(),bp=ctx.createBiquadFilter(),g=ctx.createGain(),lfo=ctx.createOscillator(),lg=ctx.createGain();
+    o1.type='sawtooth';o2.type='square';o1.frequency.value=f;o2.frequency.value=f*1.004;
+    lfo.frequency.value=5.5;lg.gain.value=f*0.006;lfo.connect(lg);lg.connect(o1.frequency);lg.connect(o2.frequency);
+    bp.type='bandpass';bp.frequency.value=1400;bp.Q.value=0.7;
+    g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.16,t+0.015);g.gain.setValueAtTime(0.16,t+Math.max(0.02,d-0.03));g.gain.linearRampToValueAtTime(0,t+d);
+    o1.connect(bp);o2.connect(bp);bp.connect(g);g.connect(master);
+    [o1,o2,lfo].forEach(function(o){o.start(t);o.stop(t+d+0.02);});
+  }
+  function drum(t,strong){
+    var o=ctx.createOscillator(),g=ctx.createGain();
+    o.frequency.setValueAtTime(strong?140:180,t);o.frequency.exponentialRampToValueAtTime(55,t+0.15);
+    g.gain.setValueAtTime(strong?0.5:0.18,t);g.gain.exponentialRampToValueAtTime(0.001,t+0.2);
+    o.connect(g);g.connect(master);o.start(t);o.stop(t+0.22);
+  }
+  function scheduleTune(t0){
+    var t=t0, beats=0;
+    TUNE.forEach(function(n){
+      var d=n[1]*BEAT;
+      if(n[0]!=='R'){
+        if(n[1]>=1){chanter(F['D5']*1.12,t,0.035);chanter(F[n[0]],t+0.035,d-0.035);} else chanter(F[n[0]],t,d);
+      }
+      t+=d;
+    });
+    var total=(t-t0)/BEAT;
+    for(var b=1;b<total-3;b++){var bt=t0+b*BEAT;drum(bt,(b-1)%3===0);}
+    return t;
+  }
+  function drone(){
+    [146.83,73.42].forEach(function(f,i){
+      var o=ctx.createOscillator(),lp=ctx.createBiquadFilter(),g=ctx.createGain();
+      o.type='sawtooth';o.frequency.value=f;lp.type='lowpass';lp.frequency.value=700;g.gain.value=i?0.05:0.06;
+      o.connect(lp);lp.connect(g);g.connect(master);o.start();
+    });
+  }
+  var unlock=document.getElementById('unlock');
+  function startMusic(){
+    /* iPhone: pasar a modo "reproducción" para que suene aunque el móvil esté en silencio */
+    try{ if(navigator.audioSession){ navigator.audioSession.type='playback'; } }catch(e){}
+    try{ unlock.muted=false; unlock.volume=1; var pp=unlock.play(); if(pp&&pp['catch']){pp['catch'](function(){});} }catch(e){}
+    try{
+      if(!ctx){
+        var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
+        ctx=new AC(); master=ctx.createGain(); master.gain.value=0.5; master.connect(ctx.destination);
+        drone(); nextStart=ctx.currentTime+0.6;
+        timer=setInterval(function(){ if(playing && ctx.currentTime>nextStart-2){ nextStart=scheduleTune(nextStart)+BEAT*2; } },300);
+      }
+      /* nota inaudible inmediata dentro del toque, para despertar el audio en móviles */
+      var b=ctx.createBuffer(1,1,22050), s=ctx.createBufferSource(); s.buffer=b; s.connect(ctx.destination); s.start(0);
+      ctx.resume(); playing=true;
+      if(ctx.currentTime>nextStart-2){ nextStart=scheduleTune(Math.max(nextStart,ctx.currentTime+0.3))+BEAT*2; }
+      musicBtn.classList.add('playing'); musicBtn.setAttribute('aria-pressed','true'); musicLabel.textContent='Silenciar';
+    }catch(e){}
+  }
+  function stopMusic(){
+    playing=false; if(ctx){try{ctx.suspend();}catch(e){}} try{unlock.pause();}catch(e){}
+    musicBtn.classList.remove('playing'); musicBtn.setAttribute('aria-pressed','false'); musicLabel.textContent='Poner música';
+  }
+  musicBtn.addEventListener('click',function(){ playing?stopMusic():startMusic(); });
+
+  function confetti(){
+    if(reduce)return;
+    canvas.hidden=false;
+    var ctx=canvas.getContext('2d'), dpr=window.devicePixelRatio||1;
+    var W=canvas.width=innerWidth*dpr, H=canvas.height=innerHeight*dpr;
+    var colors=['#f0bd45','#d9a21b','#ffffff','#6aa8ec','#2e7a4f','#0b4f9c'];
+    var parts=[];
+    for(var i=0;i<160;i++){
+      parts.push({x:W/2,y:H*0.55,vx:(Math.random()-0.5)*16*dpr,vy:(-Math.random()*16-6)*dpr,
+        w:(5+Math.random()*6)*dpr,h:(8+Math.random()*8)*dpr,r:Math.random()*6,vr:(Math.random()-0.5)*0.3,c:colors[i%colors.length]});
+    }
+    var t=0;
+    (function frame(){
+      t++; ctx.clearRect(0,0,W,H);
+      parts.forEach(function(p){
+        p.vy+=0.35*dpr; p.vx*=0.99; p.x+=p.vx; p.y+=p.vy; p.r+=p.vr;
+        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.r); ctx.fillStyle=p.c; ctx.fillRect(-p.w/2,-p.h/2,p.w,p.h); ctx.restore();
+      });
+      if(t<200) requestAnimationFrame(frame); else {ctx.clearRect(0,0,W,H); canvas.hidden=true;}
+    })();
+  }
+
+  function open(){
+    if(gift.classList.contains('open'))return;
+    gift.classList.add('open');
+    startMusic();
+    confetti();
+    try{localStorage.setItem(OPENED,'1');}catch(e){}
+    setTimeout(function(){gift.hidden=true;musicBtn.hidden=false;document.body.classList.remove('locked');window.scrollTo(0,0);}, reduce?50:1700);
+  }
+  btn.addEventListener('click',open);
+
+  document.getElementById('again').addEventListener('click',function(){
+    stopMusic(); musicBtn.hidden=true;
+    gift.hidden=false; document.body.classList.add('locked'); window.scrollTo(0,0);
+    requestAnimationFrame(function(){requestAnimationFrame(function(){gift.classList.remove('open');});});
+  });
+})();
+</script>
+
+</body>
+</html>
