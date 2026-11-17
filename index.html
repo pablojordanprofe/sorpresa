@@ -9,11 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
-<title>Rumbo a Asturias</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800;900&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap">
 <style>
 /* Layout: a gift box opens onto one phone-width column; photo-led day cards, then field notes. Colours: Asturias flag blue + Cruz de la Victoria gold */
 :root{
@@ -69,22 +64,6 @@ img{display:block;max-width:100%}
   radial-gradient(1px 1px at 50% 86%,#fff6 50%,transparent 51%)}
 .gift-kicker{font-family:var(--mono);font-size:.78rem;line-height:1.7;letter-spacing:.18em;text-transform:uppercase;color:#f0bd45}
 .tag-card{font-weight:600;font-size:.85rem!important}
-
-/* Second envelope screen */
-.sobre{z-index:51;transition:opacity .6s ease, visibility 0s linear .6s}
-.sobre .env{width:150px;height:auto;filter:drop-shadow(0 14px 30px #0008)}
-@media (prefers-reduced-motion:no-preference){.sobre:not(.open) .env{animation:float 3s ease-in-out infinite}@keyframes float{50%{transform:translateY(-8px) rotate(-2deg)}}}
-.code-form{display:grid;gap:12px;width:100%;max-width:340px;position:relative}
-.code-form label{font-size:1rem;color:#c9dbf2;line-height:1.5}
-.code-form label b{color:#fff}
-.code-row{display:flex;gap:8px}
-.code-row input{flex:1;min-width:0;font:600 1.15rem var(--mono);letter-spacing:.08em;text-transform:uppercase;text-align:center;padding:12px;border-radius:12px;border:2px solid #f0bd45;background:#031a33;color:#fff}
-.code-row input::placeholder{color:#6f87a6}
-.code-row button{flex:none;font:800 1.15rem var(--display);text-transform:uppercase;letter-spacing:.04em;padding:0 18px;border-radius:12px;border:0;background:#f0bd45;color:#062a52;cursor:pointer}
-.code-msg{min-height:1.4em;font-size:.95rem;color:#f0bd45}
-.skip{background:none;border:0;color:#9fb1c6;text-decoration:underline;font:inherit;font-size:.85rem;cursor:pointer}
-.shake{animation:shake .4s}
-@keyframes shake{20%,60%{transform:translateX(-8px)}40%,80%{transform:translateX(8px)}}
 
 /* Music toggle */
 .music{position:fixed;z-index:40;right:calc(14px + env(safe-area-inset-right,0px));bottom:calc(14px + env(safe-area-inset-bottom,0px));
@@ -223,6 +202,7 @@ footer .big span{color:var(--gold)}
 </head>
 <body>
 
+
 <!-- Gift intro -->
 <div class="gift" id="gift" role="dialog" aria-label="Sorpresa">
   <div class="stars"></div>
@@ -234,26 +214,6 @@ footer .big span{color:var(--gold)}
     <span class="tag-card">40</span>
   </button>
   <p class="hint">Abre el regalo de <b>tus 40</b></p>
-</div>
-<div class="gift sobre" id="sobre" role="dialog" aria-label="Segundo sobre" hidden>
-  <div class="stars"></div>
-  <svg class="env" viewBox="0 0 120 84" aria-hidden="true">
-    <rect x="2" y="2" width="116" height="80" rx="6" fill="#0d5cb4"/>
-    <path d="M2 8 L60 50 L118 8" fill="none" stroke="#f0bd45" stroke-width="4" stroke-linejoin="round"/>
-    <circle cx="60" cy="50" r="9" fill="#d9a21b"/>
-    <text x="60" y="55" text-anchor="middle" font-family="Big Shoulders Display, Impact, sans-serif" font-weight="900" font-size="13" fill="#062a52">2</text>
-  </svg>
-  <p class="gift-kicker">¡Esto no ha hecho más que empezar!</p>
-  <p class="gift-title">Abre el<br>segundo sobre</p>
-  <form class="code-form" id="codeForm" autocomplete="off">
-    <label for="codeInput">Dentro hay un número de vuelo. Escribe aquí el de la <b>ida</b> para descubrir tu regalo:</label>
-    <div class="code-row">
-      <input id="codeInput" inputmode="text" placeholder="V7 ····" aria-describedby="codeMsg">
-      <button type="submit">Descubrir</button>
-    </div>
-    <p class="code-msg" id="codeMsg" aria-live="polite"></p>
-    <button type="button" class="skip" id="skipCode" hidden>Entrar sin el código</button>
-  </form>
 </div>
 <canvas id="confetti" hidden></canvas>
 <audio id="unlock" src="silencio.wav" loop playsinline preload="auto"></audio>
@@ -656,14 +616,10 @@ footer .big span{color:var(--gold)}
   /* Gift */
   var gift=document.getElementById('gift'), btn=document.getElementById('openGift'), canvas=document.getElementById('confetti');
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  /* Fases: '' = caja cerrada, 'sobre' = esperando el segundo sobre, 'listo' = viaje descubierto */
-  var PHASE='regalo-fase', sobre=document.getElementById('sobre');
-  var phase=''; try{phase=localStorage.getItem(PHASE)||'';}catch(e){}
-  function setPhase(p){phase=p; try{localStorage.setItem(PHASE,p);}catch(e){}}
+  var OPENED='asturias-regalo-abierto';
+  var opened=false; try{opened=localStorage.getItem(OPENED)==='1';}catch(e){}
   var musicBtn=document.getElementById('music'), musicLabel=document.getElementById('musicLabel');
-  if(phase==='listo'){gift.classList.add('open');gift.hidden=true;musicBtn.hidden=false;}
-  else if(phase==='sobre'){gift.classList.add('open');gift.hidden=true;sobre.hidden=false;document.body.classList.add('locked');}
-  else {document.body.classList.add('locked');}
+  if(opened){gift.classList.add('open');gift.hidden=true;musicBtn.hidden=false;} else {document.body.classList.add('locked');}
 
   /* ---- Asturias, patria querida: gaita, roncón y tambor (Web Audio) ---- */
   var ctx=null, master=null, playing=false, nextStart=0, timer=null;
@@ -713,41 +669,20 @@ footer .big span{color:var(--gold)}
     });
   }
   var unlock=document.getElementById('unlock');
-  function ensureAudio(){
+  function startMusic(){
     /* iPhone: pasar a modo "reproducción" para que suene aunque el móvil esté en silencio */
     try{ if(navigator.audioSession){ navigator.audioSession.type='playback'; } }catch(e){}
     try{ unlock.muted=false; unlock.volume=1; var pp=unlock.play(); if(pp&&pp['catch']){pp['catch'](function(){});} }catch(e){}
     try{
       if(!ctx){
-        var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return false;
+        var AC=window.AudioContext||window.webkitAudioContext; if(!AC)return;
         ctx=new AC(); master=ctx.createGain(); master.gain.value=0.5; master.connect(ctx.destination);
+        drone(); nextStart=ctx.currentTime+0.6;
+        timer=setInterval(function(){ if(playing && ctx.currentTime>nextStart-2){ nextStart=scheduleTune(nextStart)+BEAT*2; } },300);
       }
       /* nota inaudible inmediata dentro del toque, para despertar el audio en móviles */
       var b=ctx.createBuffer(1,1,22050), s=ctx.createBufferSource(); s.buffer=b; s.connect(ctx.destination); s.start(0);
-      ctx.resume(); return true;
-    }catch(e){ return false; }
-  }
-  /* Fanfarria neutra al abrir la caja (sin pistas del destino) */
-  function fanfare(){
-    if(!ensureAudio())return;
-    try{
-      var t=ctx.currentTime+0.05, notes=[[523.25,.12],[659.25,.12],[783.99,.12],[1046.5,.5]];
-      notes.forEach(function(n){
-        var o=ctx.createOscillator(),g=ctx.createGain(); o.type='triangle'; o.frequency.value=n[0];
-        g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(0.35,t+0.01); g.gain.exponentialRampToValueAtTime(0.001,t+n[1]+0.25);
-        o.connect(g); g.connect(master); o.start(t); o.stop(t+n[1]+0.3); t+=n[1];
-      });
-    }catch(e){}
-  }
-  var tuneStarted=false;
-  function startMusic(){
-    if(!ensureAudio())return;
-    try{
-      if(!tuneStarted){
-        tuneStarted=true; drone(); nextStart=ctx.currentTime+0.6;
-        timer=setInterval(function(){ if(playing && ctx.currentTime>nextStart-2){ nextStart=scheduleTune(nextStart)+BEAT*2; } },300);
-      }
-      playing=true;
+      ctx.resume(); playing=true;
       if(ctx.currentTime>nextStart-2){ nextStart=scheduleTune(Math.max(nextStart,ctx.currentTime+0.3))+BEAT*2; }
       musicBtn.classList.add('playing'); musicBtn.setAttribute('aria-pressed','true'); musicLabel.textContent='Silenciar';
     }catch(e){}
@@ -783,40 +718,20 @@ footer .big span{color:var(--gold)}
   function open(){
     if(gift.classList.contains('open'))return;
     gift.classList.add('open');
-    fanfare();
+    startMusic();
     confetti();
-    setPhase('sobre');
-    setTimeout(function(){gift.hidden=true;sobre.classList.remove('open');sobre.hidden=false;}, reduce?50:1700);
+    try{localStorage.setItem(OPENED,'1');}catch(e){}
+    setTimeout(function(){gift.hidden=true;musicBtn.hidden=false;document.body.classList.remove('locked');window.scrollTo(0,0);}, reduce?50:1700);
   }
   btn.addEventListener('click',open);
 
-  /* Segundo sobre: el número del vuelo de ida (V7 3585) desbloquea el viaje */
-  var form=document.getElementById('codeForm'), input=document.getElementById('codeInput'), msg=document.getElementById('codeMsg'), skip=document.getElementById('skipCode'), fails=0;
-  function reveal(){
-    setPhase('listo');
-    sobre.classList.add('open');
-    startMusic();
-    confetti();
-    setTimeout(function(){sobre.hidden=true;musicBtn.hidden=false;document.body.classList.remove('locked');window.scrollTo(0,0);}, reduce?50:700);
-  }
-  form.addEventListener('submit',function(ev){
-    ev.preventDefault();
-    var v=(input.value||'').toUpperCase().replace(/[^A-Z0-9]/g,'');
-    if(v==='3585'||v==='V73585'){ msg.textContent='¡Correcto!'; input.blur(); reveal(); return; }
-    fails++;
-    msg.textContent= fails<2 ? 'Mmm, ese no es. Busca el vuelo de IDA en tu billete.' : 'Pista: empieza por V7 y está en la fila de la IDA.';
-    form.classList.remove('shake'); void form.offsetWidth; form.classList.add('shake');
-    if(fails>=3) skip.hidden=false;
-  });
-  skip.addEventListener('click',reveal);
-
   document.getElementById('again').addEventListener('click',function(){
-    stopMusic(); musicBtn.hidden=true; setPhase(''); fails=0; input.value=''; msg.textContent=''; skip.hidden=true;
-    sobre.hidden=true; sobre.classList.remove('open');
+    stopMusic(); musicBtn.hidden=true;
     gift.hidden=false; document.body.classList.add('locked'); window.scrollTo(0,0);
     requestAnimationFrame(function(){requestAnimationFrame(function(){gift.classList.remove('open');});});
   });
 })();
 </script>
+
 </body>
 </html>
